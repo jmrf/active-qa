@@ -1,4 +1,11 @@
 # ActiveQA: Active Question Answering
+
+This is a fork of google's [active-qa](https://github.com/google/active-qa) codebase
+with some adaptations (python3 ready, modules adaptation, ...)
+
+---
+
+
 This repo contains code for our paper [Ask the Right Questions: Active Question
  Reformulation with Reinforcement Learning](https://openreview.net/forum?id=S1CChZ-CZ).
 
@@ -42,7 +49,6 @@ mkdir $DATA_DIR
 #### Download
 Download the SearchQA dataset (~600 MB) for training, testing, and validation
 here: https://drive.google.com/open?id=1OxRhw81g7amW3aBd_iu2By5THysgr2uv
-
 ```
 <Download the dataset to $DATA_DIR/SearchQA.zip>
 unzip $DATA_DIR/SearchQA.zip -d $DATA_DIR

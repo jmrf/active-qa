@@ -13,7 +13,7 @@
 # limitations under the License.
 # ==============================================================================
 """For loading data into NMT models."""
-from __future__ import print_function
+
 
 import collections
 

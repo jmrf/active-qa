@@ -19,9 +19,9 @@ Implementation of a reformulator model that takes as input a list of questions
 strings and returns a list of lists of reformulation strings.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import json
 import os
@@ -61,7 +61,7 @@ def load_hparams(hparams_file, out_dir):
   default_hparams = hparam_utils.get_default_hparams()
   with tf.gfile.GFile(hparams_file) as f:
     hparams_values = json.load(f)
-  hparams_values[u"out_dir"] = out_dir
+  hparams_values["out_dir"] = out_dir
   hparams = tf.contrib.training.HParams(**hparams_values)
   hparam_utils.ensure_compatible_hparams(
       hparams, default_hparams, hparams_path="")

@@ -20,9 +20,9 @@ documents and receive back answers.
 
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import sys
 import time
@@ -52,7 +52,7 @@ def main(argv=()):
       FLAGS.server_address, mode=FLAGS.mode)
 
   while True:
-    questions_doc_ids = raw_input(
+    questions_doc_ids = input(
         'Enter question and doc id (use %%% to separate question and '
         'doc id and use ### to separate multiple questions): ')
 
@@ -69,7 +69,7 @@ def main(argv=()):
 
     _, _, answers = env_get_answers_fn(np.array(questions), np.array(doc_ids))
     for question, answer in zip(questions, answers):
-      print(u'question: {}\nanswer: {}'.format(
+      print('question: {}\nanswer: {}'.format(
           question.decode('utf8'), answer.decode('utf8')))
     print('{0} questions reformulated in {1:.2f} s'.format(
         len(questions),

@@ -14,9 +14,9 @@
 # ==============================================================================
 """Utilities for decoding a seq2seq model into a trie."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import collections
 
@@ -603,12 +603,12 @@ def _init_trie_keys_py_func(beam_search=False):
   if beam_search:
 
     def _py_func(batch_size, beam_size):
-      trie_keys = np.array([[u'-1'] * beam_size] * batch_size).astype('U')
+      trie_keys = np.array([['-1'] * beam_size] * batch_size).astype('U')
       return trie_keys
   else:
 
     def _py_func(batch_size):
-      trie_keys = np.array([u'-1'] * batch_size).astype('U')
+      trie_keys = np.array(['-1'] * batch_size).astype('U')
       return trie_keys
 
   return _py_func
@@ -630,13 +630,13 @@ def _amend_trie_keys_py_func(beam_search=False):
           np.arange(trie_keys.shape[0])[:, np.newaxis], (1, trie_keys.shape[1]))
       trie_keys = trie_keys[idxs.ravel(), next_beam_ids.ravel()].reshape(
           trie_keys.shape)
-      trie_keys += u' '
+      trie_keys += ' '
       trie_keys += next_word_ids.astype('U')
       return trie_keys
   else:
 
     def _py_func(trie_keys, next_word_ids):
-      trie_keys += u' '
+      trie_keys += ' '
       trie_keys += next_word_ids.astype('U')
       return trie_keys
 
@@ -731,7 +731,7 @@ def _trie_scores_py_func(trie, beam_search=False):
         return trie_key, batch_idx, subtrie_idxs
 
       for trie_key, batch_idx, subtrie_idxs in map(_py_func_inner,
-                                                   range(batch_size)):
+                                                   list(range(batch_size))):
         if not len(subtrie_idxs):
           subtrie_idxs.add(int(trie.eos_idx))
         if len(subtrie_idxs):

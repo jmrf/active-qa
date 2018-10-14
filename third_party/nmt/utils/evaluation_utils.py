@@ -58,7 +58,7 @@ def _clean(sentence, subword_option):
 
   # SPM
   elif subword_option == "spm":
-    sentence = u"".join(sentence.split()).replace(u"\u2581", u" ").lstrip()
+    sentence = "".join(sentence.split()).replace("\u2581", " ").lstrip()
 
   return sentence
 
@@ -165,8 +165,8 @@ def _moses_bleu(multi_bleu_script, tgt_test, trans_file, subword_option=None):
     if not os.path.exists(despm_tgt_test):
       subprocess.call("cp %s %s" % (tgt_test, despm_tgt_test))
       subprocess.call("sed s/ //g %s" % (despm_tgt_test))
-      subprocess.call(u"sed s/^\u2581/g %s" % (despm_tgt_test))
-      subprocess.call(u"sed s/\u2581/ /g %s" % (despm_tgt_test))
+      subprocess.call("sed s/^\u2581/g %s" % (despm_tgt_test))
+      subprocess.call("sed s/\u2581/ /g %s" % (despm_tgt_test))
     tgt_test = despm_tgt_test
   cmd = "%s %s < %s" % (multi_bleu_script, tgt_test, trans_file)
 

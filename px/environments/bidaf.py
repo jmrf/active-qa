@@ -19,9 +19,9 @@ model to produce an answer on a specified SQuAD datapoint to a new question
 rather than the original.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import json
 import math
@@ -178,7 +178,7 @@ class BidafEnvironment(object):
 
     data_out = dict()
     # Copies relevant datapoint, retaining the input docids.
-    for key in dataset.data.iterkeys():
+    for key in dataset.data.keys():
       if key == 'ids':
         data_out[key] = document_ids
       else:

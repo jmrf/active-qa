@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import numpy as np
 import tensorflow as tf
@@ -29,8 +29,8 @@ class Evaluation(object):
         'num_examples': self.num_examples
     }
     if tensor_dict is not None:
-      self.tensor_dict = {key: val.tolist() for key, val in tensor_dict.items()}
-      for key, val in self.tensor_dict.items():
+      self.tensor_dict = {key: val.tolist() for key, val in list(tensor_dict.items())}
+      for key, val in list(self.tensor_dict.items()):
         self.dict[key] = val
     self.summaries = None
 
@@ -48,7 +48,7 @@ class Evaluation(object):
     if self.tensor_dict is not None:
       new_tensor_dict = {
           key: val + other.tensor_dict[key]
-          for key, val in self.tensor_dict.items()
+          for key, val in list(self.tensor_dict.items())
       }
     return Evaluation(
         self.data_type,
@@ -80,7 +80,7 @@ class LabeledEvaluation(Evaluation):
     if self.tensor_dict is not None:
       new_tensor_dict = {
           key: np.concatenate((val, other.tensor_dict[key]), axis=0)
-          for key, val in self.tensor_dict.items()
+          for key, val in list(self.tensor_dict.items())
       }
     return LabeledEvaluation(
         self.data_type,
@@ -137,7 +137,7 @@ class AccuracyEvaluation(LabeledEvaluation):
     if self.tensor_dict is not None:
       new_tensor_dict = {
           key: np.concatenate((val, other.tensor_dict[key]), axis=0)
-          for key, val in self.tensor_dict.items()
+          for key, val in list(self.tensor_dict.items())
       }
     return AccuracyEvaluation(
         self.data_type,
@@ -166,7 +166,7 @@ class Evaluator(object):
         [self.global_step, self.yp, list(self.tensor_dict.values())],
         feed_dict=feed_dict)
     yp = yp[:data_set.num_examples]
-    tensor_dict = dict(zip(self.tensor_dict.keys(), vals))
+    tensor_dict = dict(list(zip(list(self.tensor_dict.keys()), vals)))
     e = Evaluation(
         data_set.data_type,
         int(global_step),
@@ -195,7 +195,7 @@ class LabeledEvaluator(Evaluator):
         feed_dict=feed_dict)
     yp = yp[:data_set.num_examples]
     y = feed_dict[self.y]
-    tensor_dict = dict(zip(self.tensor_dict.keys(), vals))
+    tensor_dict = dict(list(zip(list(self.tensor_dict.keys()), vals)))
     e = LabeledEvaluation(
         data_set.data_type,
         int(global_step),
@@ -223,7 +223,7 @@ class AccuracyEvaluator(LabeledEvaluator):
     y = data_set.data['y']
     yp = yp[:data_set.num_examples]
     correct = [self.__class__.compare(yi, ypi) for yi, ypi in zip(y, yp)]
-    tensor_dict = dict(zip(self.tensor_dict.keys(), vals))
+    tensor_dict = dict(list(zip(list(self.tensor_dict.keys()), vals)))
     e = AccuracyEvaluation(
         data_set.data_type,
         int(global_step),
@@ -293,7 +293,7 @@ class ForwardEvaluation(Evaluation):
     if self.tensor_dict is not None:
       new_tensor_dict = {
           key: np.concatenate((val, other.tensor_dict[key]), axis=0)
-          for key, val in self.tensor_dict.items()
+          for key, val in list(self.tensor_dict.items())
       }
     return ForwardEvaluation(
         self.data_type,
@@ -419,8 +419,8 @@ class F1Evaluator(LabeledEvaluator):
       y = new_y
 
     yp, yp2 = yp[:data_set.num_examples], yp2[:data_set.num_examples]
-    spans, scores = zip(
-        *[get_best_span(ypi, yp2i) for ypi, yp2i in zip(yp, yp2)])
+    spans, scores = list(zip(
+        *[get_best_span(ypi, yp2i) for ypi, yp2i in zip(yp, yp2)]))
 
     def _get(xi, span):
       if len(xi) <= span[0][0]:
@@ -452,7 +452,7 @@ class F1Evaluator(LabeledEvaluator):
     id2f1_dict = {id_: f1 for id_, f1 in zip(data_set.data['ids'], f1s)}
     id2answer_dict['f1_scores'] = id2f1_dict
 
-    tensor_dict = dict(zip(self.tensor_dict.keys(), vals))
+    tensor_dict = dict(list(zip(list(self.tensor_dict.keys()), vals)))
     e = F1Evaluation(
         data_set.data_type,
         int(global_step),
@@ -517,7 +517,7 @@ class MultiGPUF1Evaluator(F1Evaluator):
       self.loss = tf.add_n([model.loss for model in models]) / len(models)
 
   def _split_batch(self, batches):
-    idxs_list, data_sets = zip(*batches)
+    idxs_list, data_sets = list(zip(*batches))
     idxs = sum(idxs_list, ())
     data_set = sum(data_sets, data_sets[0].get_empty())
     return idxs, data_set
@@ -549,8 +549,8 @@ class ForwardEvaluator(Evaluator):
         feed_dict=feed_dict)
 
     yp, yp2 = yp[:data_set.num_examples], yp2[:data_set.num_examples]
-    spans, scores = zip(
-        *[get_best_span(ypi, yp2i) for ypi, yp2i in zip(yp, yp2)])
+    spans, scores = list(zip(
+        *[get_best_span(ypi, yp2i) for ypi, yp2i in zip(yp, yp2)]))
 
     def _get(xi, span):
       if len(xi) <= span[0][0]:
@@ -576,7 +576,7 @@ class ForwardEvaluator(Evaluator):
         for id_, score in zip(data_set.data['ids'], scores)
     }
     id2answer_dict['scores'] = id2score_dict
-    tensor_dict = dict(zip(self.tensor_dict.keys(), vals))
+    tensor_dict = dict(list(zip(list(self.tensor_dict.keys()), vals)))
     e = ForwardEvaluation(
         data_set.data_type,
         int(global_step),

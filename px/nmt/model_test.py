@@ -15,9 +15,9 @@
 
 """Tests for model.py."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import os
 import pprint
@@ -1066,7 +1066,7 @@ class ModelTest(tf.test.TestCase):
         'dynamic_seq2seq/context_rnn_encoder/bidirectional_rnn/bw/basic_lstm_cell/kernel:0',
         'dynamic_seq2seq/context_rnn_encoder/bidirectional_rnn/bw/basic_lstm_cell/bias:0',
         'dynamic_seq2seq/context_resizer:0',
-        u'dynamic_seq2seq/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0',
+        'dynamic_seq2seq/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/kernel:0',
         'dynamic_seq2seq/encoder/rnn/multi_rnn_cell/cell_0/basic_lstm_cell/bias:0',
         'dynamic_seq2seq/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/kernel:0',
         'dynamic_seq2seq/encoder/rnn/multi_rnn_cell/cell_1/basic_lstm_cell/bias:0',

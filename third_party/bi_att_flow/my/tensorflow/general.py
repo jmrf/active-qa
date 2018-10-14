@@ -1,9 +1,9 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 try:
-  from itertools import izip_longest as zip_longest
+  from itertools import zip_longest as zip_longest
 except ImportError:
   from itertools import zip_longest
 
@@ -180,7 +180,7 @@ def grouper(iterable, n, fillvalue=None, shorten=False, num_groups=None):
     assert isinstance(num_groups, int)
     out = list(
         each
-        for each, _ in zip_longest(out, range(num_groups), fillvalue=default))
+        for each, _ in zip_longest(out, list(range(num_groups)), fillvalue=default))
   if shorten:
     assert fillvalue is None
     out = (tuple(e for e in each if e is not None) for each in out)

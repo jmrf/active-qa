@@ -15,9 +15,9 @@
 
 """Convert the context string into a vector."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import tensorflow as tf
 from third_party.nmt.utils import misc_utils as utils

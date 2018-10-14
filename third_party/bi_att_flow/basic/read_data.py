@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import json
 import os
@@ -30,7 +30,7 @@ class Data(object):
     data = defaultdict(list)
     for idx in idxs:
       each_data = self.get_one(idx)
-      for key, val in each_data.items():
+      for key, val in list(each_data.items()):
         data[key].append(val)
     return data
 
@@ -51,18 +51,18 @@ class DataSet(object):
     self.data_type = data_type
     self.shared = shared
     total_num_examples = self.get_data_size()
-    self.valid_idxs = range(
-        total_num_examples) if valid_idxs is None else valid_idxs
+    self.valid_idxs = list(range(
+        total_num_examples)) if valid_idxs is None else valid_idxs
     self.num_examples = len(self.valid_idxs)
 
   def _sort_key(self, idx):
     rx = self.data['*x'][idx]
     x = self.shared['x'][rx[0]][rx[1]]
-    return max(map(len, x))
+    return max(list(map(len, x)))
 
   def get_data_size(self):
     if isinstance(self.data, dict):
-      return len(next(iter(self.data.values())))
+      return len(next(iter(list(self.data.values()))))
     elif isinstance(self.data, Data):
       return self.data.get_size()
     raise Exception()
@@ -70,7 +70,7 @@ class DataSet(object):
   def get_by_idxs(self, idxs):
     if isinstance(self.data, dict):
       out = defaultdict(list)
-      for key, val in self.data.items():
+      for key, val in list(self.data.items()):
         out[key].extend(val[idx] for idx in idxs)
       return out
     elif isinstance(self.data, Data):
@@ -113,7 +113,7 @@ class DataSet(object):
       batch_idxs = tuple(i for i in next(batch_idx_tuples) if i is not None)
       batch_data = self.get_by_idxs(batch_idxs)
       shared_batch_data = {}
-      for key, val in batch_data.items():
+      for key, val in list(batch_data.items()):
         if key.startswith('*'):
           if key == '*cx' and 'cx' not in self.shared:
             continue
@@ -157,7 +157,7 @@ class DataSet(object):
 
   def __add__(self, other):
     if isinstance(self.data, dict):
-      data = {key: val + other.data[key] for key, val in self.data.items()}
+      data = {key: val + other.data[key] for key, val in list(self.data.items())}
     elif isinstance(self.data, Data):
       data = self.data + other.data
     else:
@@ -184,7 +184,7 @@ def load_metadata(config, data_type):
                                'metadata_{}.json'.format(data_type))
   with tf.gfile.Open(metadata_path, 'r') as fh:
     metadata = json.load(fh)
-    for key, val in metadata.items():
+    for key, val in list(metadata.items()):
       config.__setattr__(key, val)
     return metadata
 
@@ -198,13 +198,13 @@ def read_data(config, data_type, ref, data_filter=None):
   with tf.gfile.Open(shared_path, 'r') as fh:
     shared = json.load(fh)
 
-  num_examples = len(next(iter(data.values())))
+  num_examples = len(next(iter(list(data.values()))))
   if data_filter is None:
-    valid_idxs = range(num_examples)
+    valid_idxs = list(range(num_examples))
   else:
     mask = []
-    keys = data.keys()
-    values = data.values()
+    keys = list(data.keys())
+    values = list(data.values())
     for vals in zip(*values):
       each = {key: val for key, val in zip(keys, vals)}
       mask.append(data_filter(each, shared))
@@ -234,7 +234,7 @@ def read_data(config, data_type, ref, data_filter=None):
       shared['word2idx'] = {
           word: idx + 2
           for idx, word in enumerate(word
-                                     for word, count in word_counter.items()
+                                     for word, count in list(word_counter.items())
                                      if count > config.word_count_th or
                                      (config.known_if_glove and
                                       word in word2vec_dict))
@@ -245,13 +245,13 @@ def read_data(config, data_type, ref, data_filter=None):
       shared['word2idx'] = {
           word: idx + 2
           for idx, word in enumerate(word
-                                     for word, count in word_counter.items()
+                                     for word, count in list(word_counter.items())
                                      if count > config.word_count_th and
                                      word not in word2vec_dict)
       }
     shared['char2idx'] = {
         char: idx + 2
-        for idx, char in enumerate(char for char, count in char_counter.items()
+        for idx, char in enumerate(char for char, count in list(char_counter.items())
                                    if count > config.char_count_th)
     }
     NULL = '-NULL-'
@@ -266,7 +266,7 @@ def read_data(config, data_type, ref, data_filter=None):
     }, tf.gfile.Open(shared_path, 'w'))
   else:
     new_shared = json.load(tf.gfile.Open(shared_path, 'r'))
-    for key, val in new_shared.items():
+    for key, val in list(new_shared.items()):
       shared[key] = val
 
   if config.use_glove_for_unk:
@@ -275,7 +275,7 @@ def read_data(config, data_type, ref, data_filter=None):
         'word2vec']
     new_word2idx_dict = {
         word: idx
-        for idx, word in enumerate(word for word in word2vec_dict.keys()
+        for idx, word in enumerate(word for word in list(word2vec_dict.keys())
                                    if word not in shared['word2idx'])
     }
     shared['new_word2idx'] = new_word2idx_dict
@@ -285,7 +285,7 @@ def read_data(config, data_type, ref, data_filter=None):
     new_word2idx_dict = shared['new_word2idx']
     idx2vec_dict = {
         idx: word2vec_dict[word]
-        for word, idx in new_word2idx_dict.items()
+        for word, idx in list(new_word2idx_dict.items())
     }
     print('{}/{} unique words have corresponding glove vectors.'.format(
         len(idx2vec_dict), len(new_word2idx_dict)))
@@ -366,7 +366,7 @@ def update_config(config, data_sets):
       sents = shared['x'][rx[0]][rx[1]]
       config.max_para_size = max(config.max_para_size, sum(map(len, sents)))
       config.max_num_sents = max(config.max_num_sents, len(sents))
-      config.max_sent_size = max(config.max_sent_size, max(map(len, sents)))
+      config.max_sent_size = max(config.max_sent_size, max(list(map(len, sents))))
       config.max_word_size = max(config.max_word_size,
                                  max(
                                      len(word) for sent in sents
@@ -385,9 +385,8 @@ def update_config(config, data_sets):
 
   config.char_vocab_size = len(data_sets[0].shared['char2idx'])
   config.word_emb_size = len(
-      next(iter(data_sets[0].shared['lower_word2vec']
-                .values()))) if config.lower_word else len(
-                    next(iter(data_sets[0].shared['word2vec'].values())))
+      next(iter(list(data_sets[0].shared['lower_word2vec'].values())))) if config.lower_word else len(
+                    next(iter(list(data_sets[0].shared['word2vec'].values()))))
   config.word_vocab_size = len(data_sets[0].shared['word2idx'])
 
   if config.single:

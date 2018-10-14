@@ -15,7 +15,7 @@
 
 """For training NMT models in one joined graph for train/infer/eval."""
 
-from __future__ import print_function
+
 
 import math
 import os

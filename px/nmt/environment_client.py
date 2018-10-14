@@ -13,10 +13,10 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
+
+
 
 from collections import OrderedDict
 from multiprocessing.pool import ThreadPool
@@ -60,9 +60,9 @@ def multi_call_environment(pool, stub, request, timeouts):
 
     all_responses = pool.map(
         single_call_environment,
-        zip(
+        list(zip(
             len(all_requests) * [stub], all_requests,
-            len(all_requests) * [timeouts]))
+            len(all_requests) * [timeouts])))
 
     for responses in all_responses:
       if responses is not None:
@@ -244,7 +244,7 @@ def make_environment_reward_fn(environment_server,
             # Webanswers may not answer the question, in these cases the
             # error message field is populated.
             if mode == 'search' and response_i.error_message != '':
-              tf.logging.info(u'RPC error: {}'.format(
+              tf.logging.info('RPC error: {}'.format(
                   response_i.error_message).encode('utf-8'))
               continue
 
@@ -272,17 +272,17 @@ def make_environment_reward_fn(environment_server,
 
     # update cache with the new items:
     if cache is not None:
-      for k, v in cache_new.items():
+      for k, v in list(cache_new.items()):
         cache[k] = v
 
     # print a sample of 10 replies
     for i in range(len(answered))[:10]:
       try:
         if not answered[i]:
-          tf.logging.info(u'Unanswered: {} : {} : {} : {}'.format(
+          tf.logging.info('Unanswered: {} : {} : {} : {}'.format(
               i, questions[i], doc_ids[i], scores[i]).encode('utf-8'))
         else:
-          tf.logging.info(u'Answered: {} : {} : {} : {} : {}'.format(
+          tf.logging.info('Answered: {} : {} : {} : {} : {}'.format(
               i, questions[i], answers[i], doc_ids[i],
               scores[i]).encode('utf-8'))
       except UnicodeEncodeError as e:
@@ -296,13 +296,13 @@ def make_environment_reward_fn(environment_server,
         tf.logging.error(questions[i])
 
     if cache is not None:
-      tf.logging.info(u'Cache size current/limit: {}/{}'.format(
+      tf.logging.info('Cache size current/limit: {}/{}'.format(
           len(cache), cache_size))
 
-      tf.logging.info(u'Cache hit/total: {}/{}'.format(cache_hit,
+      tf.logging.info('Cache hit/total: {}/{}'.format(cache_hit,
                                                        len(questions)))
 
-    tf.logging.info(u'Time to make {} environment calls: {}'.format(
+    tf.logging.info('Time to make {} environment calls: {}'.format(
         len(request.queries),
         time.time() - start_time))
 

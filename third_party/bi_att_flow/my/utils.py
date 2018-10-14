@@ -1,6 +1,6 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import json
 from collections import deque
@@ -50,7 +50,7 @@ def short_floats(o, precision):
     if isinstance(obj, float):
       return ShortFloat(obj)
     elif isinstance(obj, dict):
-      return dict((k, _short_floats(v)) for k, v in obj.items())
+      return dict((k, _short_floats(v)) for k, v in list(obj.items()))
     elif isinstance(obj, (list, tuple)):
       return tuple(map(_short_floats, obj))
     return obj

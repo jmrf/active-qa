@@ -15,9 +15,9 @@
 
 """Utility functions for logging, with special regard to Unicode handling."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 
 import numpy as np
@@ -26,7 +26,7 @@ import tensorflow as tf
 
 def safe_string(s):
   """Safely converts unicode and plain strings to byte strings."""
-  if isinstance(s, unicode):
+  if isinstance(s, str):
     try:
       s = s.encode('utf-8')
     except UnicodeDecodeError:

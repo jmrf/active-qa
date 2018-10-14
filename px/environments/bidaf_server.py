@@ -20,9 +20,9 @@ contain answers from the BiDAF environment and associated scores.
 
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 from concurrent import futures
 import time
@@ -140,7 +140,7 @@ class BidafServer(aqa_pb2_grpc.EnvironmentServerServicer):
       # Add an index to each id to make them unique, as required by BiDAF. This
       # augmentation of the docid is for BiDAF internal use and is not visible
       # to the client.
-      unique_id = u'{:s}{:s}{:d}'.format(query.id, DOCID_SEPARATOR, index)
+      unique_id = '{:s}{:s}{:d}'.format(query.id, DOCID_SEPARATOR, index)
       index += 1
       document_ids.append(unique_id)
     if self.debug_mode:
@@ -162,7 +162,7 @@ class BidafServer(aqa_pb2_grpc.EnvironmentServerServicer):
           len(answer_dict) - 1, len(request.queries)))
       return response
 
-    for docid in answer_dict.iterkeys():
+    for docid in answer_dict.keys():
       if docid == 'scores' or docid == 'f1_scores':
         continue
       output_response = response.responses.add()

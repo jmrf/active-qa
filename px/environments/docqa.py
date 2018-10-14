@@ -19,9 +19,9 @@ The environment uses a DocQA model to produce an answer from a specified
 document.
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import pandas as pd
 import pickle
@@ -136,7 +136,7 @@ class DocqaEnvironment(object):
     # the graph / encoding the input.
     # This step is here to compute the vocabulary.
     data_flattened = []
-    for val in self.data.values():
+    for val in list(self.data.values()):
       data_flattened.extend(val)
     temp_data = ParagraphAndQuestionDataset(data_flattened,
                                             FixedOrderBatcher(batch_size, True))

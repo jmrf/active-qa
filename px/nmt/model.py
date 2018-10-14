@@ -15,9 +15,9 @@
 
 """Basic sequence-to-sequence model with dynamic RNN support."""
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import abc
 import inspect
@@ -185,7 +185,7 @@ class BaseModel(object):
       self.gradients_norm = gradients_norm
 
       self.update = opt.apply_gradients(
-          zip(clipped_gradients, params), global_step=self.global_step)
+          list(zip(clipped_gradients, params)), global_step=self.global_step)
 
       # Summary
       self.train_summary = tf.summary.merge([
@@ -714,7 +714,7 @@ class BaseModel(object):
           length = tokens.index(eos)
         else:
           length = len(tokens) + 1
-        string = u''.join(tokens[:length])
+        string = ''.join(tokens[:length])
       except UnicodeEncodeError as e:
         tf.logging.error(e)
         tf.logging.error(repr(tokens))
@@ -725,7 +725,7 @@ class BaseModel(object):
         tf.logging.error(e)
         tf.logging.error(repr(tokens))
 
-      string = string.replace(u'\u2581', u' ').lstrip()
+      string = string.replace('\u2581', ' ').lstrip()
 
       strings.append(string)
     return np.array(strings, dtype=np.object)

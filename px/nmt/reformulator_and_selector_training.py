@@ -22,9 +22,9 @@ Additional flags defined in selector_keras.py:
 """
 # pylint: enable=g-line-too-long
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import codecs
 import json
@@ -100,7 +100,7 @@ def read_data(questions_file,
 
   if preprocessing_mode == 'searchqa':
     questions = [
-        q.lower().replace(u'.', u' ').replace(u',', u' , ') for q in questions
+        q.lower().replace('.', ' ').replace(',', ' , ') for q in questions
     ]
     questions = [' '.join(q.split()) for q in questions]
 
@@ -123,10 +123,10 @@ def read_data(questions_file,
 
 def batch(questions, annotations, batch_size):
   """Generator function producing shuffled and batched questions/annotations."""
-  data = zip(questions, annotations)
+  data = list(zip(questions, annotations))
   random.shuffle(data)
   for index in range(0, len(questions), batch_size):
-    yield zip(*data[index:index + batch_size])
+    yield list(zip(*data[index:index + batch_size]))
 
 
 def query_environment(original_questions, rewrites, annotations, environment_fn,
@@ -242,7 +242,7 @@ def _run_eval_with_selector(questions, annotations, docid_2_answer,
           safe_string(questions_batch[0]), safe_string(annotations_batch[0])))
       print('Rewrites: {}'.format(safe_string(reformulations[0])))
       print('Answers and Scores: {}'.format(
-          zip(safe_string(answers[0]), scores[0])))
+          list(zip(safe_string(answers[0]), scores[0]))))
 
   return np.mean(f1s)
 

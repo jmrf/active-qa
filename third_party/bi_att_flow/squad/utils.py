@@ -13,9 +13,9 @@
 # limitations under the License.
 # ==============================================================================
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
+
+
+
 
 import re
 
@@ -90,12 +90,12 @@ def get_word_idx(context, wordss, idx):
 def process_tokens(temp_tokens):
   tokens = []
   for token in temp_tokens:
-    l = (u"-", u"\u2212", u"\u2014", u"\u2013", u"/", u"~", '"', u"'",
-         u"\u201C", u"\u2019", u"\u201D", u"\u2018", u"\u00B0")
+    l = ("-", "\u2212", "\u2014", "\u2013", "/", "~", '"', "'",
+         "\u201C", "\u2019", "\u201D", "\u2018", "\u00B0")
     # \u2013 is en-dash. Used for number to number
     # l = ("-", "\u2212", "\u2014", "\u2013")
     # l = ("\u2013",)
-    tokens.extend(re.split(u"([{}])".format(u"".join(l)), token))
+    tokens.extend(re.split("([{}])".format("".join(l)), token))
   return tokens
 
 

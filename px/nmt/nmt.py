@@ -15,7 +15,7 @@
 
 """TensorFlow NMT model implementation."""
 
-from __future__ import print_function
+
 
 import argparse
 import os
@@ -884,8 +884,8 @@ def ensure_compatible_hparams(hparams, default_hparams, hparams_path):
 
   # For compatible reason, if there are new fields in default_hparams,
   #   we add them to the current hparams
-  default_config = default_hparams.values()
-  config = hparams.values()
+  default_config = list(default_hparams.values())
+  config = list(hparams.values())
   for key in default_config:
     if key not in config:
       hparams.add_hparam(key, default_config[key])
